@@ -1,12 +1,15 @@
 /**
  * Original stylized "shadow fighter" characters rendered as inline SVG —
- * solid dark silhouette bodies (single filled shape, dynamic lunge pose)
- * with only a thin colored rim-light on the leading edge and a colored
- * weapon/accessory accent, in the spirit of cinematic silhouette fighting
- * games (Shadow Fight-style), but fully original designs.
+ * solid dark silhouette bodies in the spirit of cinematic silhouette
+ * fighting games (Shadow Fight-style), but fully original designs.
+ *
+ * The body is built from separate articulated groups (front arm, front
+ * leg, static torso/head/back-limbs) so attacks actually swing a limb
+ * toward the opponent — a thrown jab, a swung blade, a kicked leg —
+ * instead of just nudging the whole sprite sideways.
  *
  * Two fighters:
- *   - crimson: "Crimson Blade"  (red rim, curved blade raised overhead)
+ *   - crimson: "Crimson Blade"  (red rim, curved blade in the lead hand)
  *   - azure:   "Azure Fist"     (blue rim, glowing power gauntlets)
  */
 
@@ -17,7 +20,8 @@ const CHAR_THEMES = {
 
 function buildFighterSVG(charId) {
   const t = CHAR_THEMES[charId] || CHAR_THEMES.crimson;
-  const extra = charId === "crimson" ? crimsonExtras(t) : azureExtras(t);
+  const armExtra = charId === "crimson" ? crimsonArmExtra(t) : azureArmExtra(t);
+  const bodyExtra = charId === "crimson" ? crimsonBodyExtra(t) : azureBodyExtra(t);
 
   return `
   <svg class="fighter-svg" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
@@ -37,64 +41,75 @@ function buildFighterSVG(charId) {
     </defs>
 
     <!-- ground power aura -->
-    <ellipse cx="104" cy="280" rx="58" ry="12" fill="url(#aura-${charId})"/>
+    <ellipse cx="100" cy="282" rx="56" ry="11" fill="url(#aura-${charId})"/>
 
-    <!-- SOLID SILHOUETTE: one dynamic lunge-forward fighting pose, true
-         flat-black cutout (like a shadow), with a faint 1px rim-light on
-         the top/leading edge only (drawn as a thin offset outline, not a
-         full neon stroke). -->
-    <g fill="${t.silhouette}">
-      <!-- trailing back leg, bent at the knee, pushing off behind -->
-      <path d="M100,172 L72,204 L58,250 L60,274 L78,274 L84,240 L100,206 L110,184 Z"/>
-      <!-- driving front leg, knee bent forward, foot planted leading edge -->
-      <path d="M108,176 L140,196 L156,236 L152,274 L132,274 L130,242 L112,212 L98,188 Z"/>
-      <!-- torso leaning into the lunge -->
-      <path d="M86,96 C74,112 70,134 78,156 C82,168 92,178 104,182 C114,172 120,156 118,138 C116,118 128,100 120,88 C110,78 94,82 86,96 Z"/>
-      <!-- back arm, cocked high behind the head -->
-      <path d="M96,98 C82,86 66,78 50,76 L46,88 C60,92 72,100 84,112 Z"/>
-      <!-- front arm, driving forward (weapon/fist attaches at tip) -->
-      <path d="M116,96 C134,92 152,88 168,78 L176,90 C160,100 144,108 126,112 Z"/>
-      <!-- head, chin tucked, leaning into the charge -->
-      <circle cx="98" cy="62" r="21"/>
-      <path d="M78,66 C84,78 98,84 112,78 L108,60 C100,66 88,66 82,56 Z"/>
+    <!-- STATIC BODY: back leg, torso, back arm, head (upright guard stance) -->
+    <g class="body-grp" fill="${t.silhouette}">
+      <path d="M90,180 L62,206 L48,248 L50,276 L72,276 L80,240 L88,208 Z"/>
+      <path d="M82,98 C72,112 68,134 76,156 C80,168 90,178 102,182 C112,172 118,156 116,138 C114,118 124,100 116,90 C106,80 90,84 82,98 Z"/>
+      <path d="M84,96 C74,86 64,80 54,80 L52,92 C62,94 70,100 78,110 Z"/>
+      <circle cx="98" cy="62" r="20"/>
+      <path d="M79,66 C85,77 98,83 111,77 L107,60 C100,65 89,65 83,56 Z"/>
     </g>
 
-    <!-- thin rim-light along the top/leading silhouette edge only -->
-    <path d="M86,96 C74,112 70,134 78,156 M96,98 C82,86 66,78 50,76 M78,66 C72,58 70,48 76,40"
+    <!-- FRONT LEG: pivots at the hip (108,178) — swings for the roundhouse kick -->
+    <g class="front-leg-grp" fill="${t.silhouette}">
+      <path d="M108,178 L134,198 L146,236 L142,276 L122,276 L120,244 L110,212 L104,188 Z"/>
+    </g>
+
+    <!-- FRONT ARM: pivots at the shoulder (114,98) — throws the jab/slash/flamepunch -->
+    <g class="front-arm-grp" fill="${t.silhouette}">
+      <path d="M114,98 C124,88 132,74 132,52 L118,48 C118,66 112,80 100,92 Z"/>
+      ${armExtra}
+    </g>
+
+    <!-- thin rim-light along the static silhouette edges only -->
+    <path d="M82,98 C72,112 68,134 76,156 M84,96 C74,86 64,80 54,80 M79,66 C73,58 71,48 77,40"
       fill="none" stroke="${t.glow}" stroke-width="1.6" opacity="0.85" filter="url(#rimglow-${charId})" stroke-linecap="round"/>
-    <circle cx="98" cy="62" r="21" fill="none" stroke="${t.glow}" stroke-width="1.1" opacity="0.5" stroke-dasharray="40 100" filter="url(#rimglow-${charId})"/>
+    <circle cx="98" cy="62" r="20" fill="none" stroke="${t.glow}" stroke-width="1.1" opacity="0.5" stroke-dasharray="38 100" filter="url(#rimglow-${charId})"/>
 
     <!-- faint glowing eye -->
-    <circle cx="92" cy="60" r="2.6" fill="${t.glowHot}" filter="url(#softglow-${charId})"/>
+    <circle cx="92" cy="60" r="2.5" fill="${t.glowHot}" filter="url(#softglow-${charId})"/>
 
-    ${extra}
+    ${bodyExtra}
   </svg>`;
 }
 
-function crimsonExtras(t) {
-  // Curved blade raised in the forward hand, with a glowing edge + motion trail.
+function crimsonArmExtra(t) {
+  // Curved blade held in the lead hand — rides the front-arm group, so it
+  // swings and slashes together with the arm.
   return `
     <g filter="url(#softglow-crimson)">
-      <path d="M168,78 C186,64 200,44 198,22 C180,30 164,48 152,70 Z" fill="${t.silhouette}"/>
-      <path d="M168,78 C186,64 200,44 198,22" fill="none" stroke="${t.glow}" stroke-width="2" opacity="0.9"/>
+      <path d="M130,50 C142,36 154,18 152,0 C136,8 122,24 112,42 Z" fill="${t.silhouette}"/>
+      <path d="M130,50 C142,36 154,18 152,0" fill="none" stroke="${t.glow}" stroke-width="2" opacity="0.9"/>
     </g>
-    <path d="M160,86 C176,72 188,54 192,34" stroke="${t.glowSoft}" stroke-width="1.2" opacity="0.4" fill="none"/>
-    <!-- torn cape trailing from the back shoulder -->
-    <path d="M60,100 C44,124 40,152 50,178 C58,160 54,132 70,106 Z" fill="${t.silhouette}" opacity="0.92"/>
-    <path d="M60,100 C44,124 40,152 50,178" fill="none" stroke="${t.glow}" stroke-width="1" opacity="0.5"/>
+    <path d="M122,58 C134,46 144,30 148,14" stroke="${t.glowSoft}" stroke-width="1.1" opacity="0.4" fill="none"/>
   `;
 }
 
-function azureExtras(t) {
-  // Glowing power gauntlets on both fists + chest energy core.
+function crimsonBodyExtra(t) {
+  // Torn cape trailing from the back shoulder — stays with the static body.
   return `
-    <circle cx="174" cy="86" r="11" fill="${t.silhouette}" filter="url(#softglow-azure)"/>
-    <circle cx="174" cy="86" r="11" fill="none" stroke="${t.glow}" stroke-width="1.6" opacity="0.9"/>
-    <circle cx="174" cy="86" r="4.4" fill="${t.glowHot}"/>
-    <circle cx="48" cy="80" r="9" fill="${t.silhouette}" filter="url(#softglow-azure)"/>
-    <circle cx="48" cy="80" r="9" fill="none" stroke="${t.glow}" stroke-width="1.4" opacity="0.8"/>
-    <circle cx="48" cy="80" r="3.4" fill="${t.glowHot}"/>
-    <!-- chest energy core -->
+    <path d="M58,98 C42,122 38,150 48,176 C56,158 52,130 68,104 Z" fill="${t.silhouette}" opacity="0.92"/>
+    <path d="M58,98 C42,122 38,150 48,176" fill="none" stroke="${t.glow}" stroke-width="1" opacity="0.5"/>
+  `;
+}
+
+function azureArmExtra(t) {
+  // Glowing power gauntlet on the lead fist — rides the front-arm group.
+  return `
+    <circle cx="130" cy="50" r="11" fill="${t.silhouette}" filter="url(#softglow-azure)"/>
+    <circle cx="130" cy="50" r="11" fill="none" stroke="${t.glow}" stroke-width="1.6" opacity="0.9"/>
+    <circle cx="130" cy="50" r="4.2" fill="${t.glowHot}"/>
+  `;
+}
+
+function azureBodyExtra(t) {
+  // Back gauntlet + chest energy core — stay with the static body.
+  return `
+    <circle cx="54" cy="80" r="9" fill="${t.silhouette}" filter="url(#softglow-azure)"/>
+    <circle cx="54" cy="80" r="9" fill="none" stroke="${t.glow}" stroke-width="1.4" opacity="0.8"/>
+    <circle cx="54" cy="80" r="3.4" fill="${t.glowHot}"/>
     <circle cx="98" cy="128" r="6" fill="${t.silhouette}" filter="url(#softglow-azure)"/>
     <circle cx="98" cy="128" r="6" fill="none" stroke="${t.glow}" stroke-width="1.3" opacity="0.8"/>
     <circle cx="98" cy="128" r="2.4" fill="${t.glowHot}"/>
