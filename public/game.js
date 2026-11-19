@@ -55,6 +55,16 @@
   const gameoverCoins = document.getElementById("gameover-coins");
   const btnRematch = document.getElementById("btn-rematch");
 
+  // ---------- Anti-cheat: block copying the prompt word into the input ----------
+  // No selecting/copying/dragging the prompt text itself.
+  ["copy", "cut", "selectstart", "dragstart", "contextmenu"].forEach((ev) => {
+    promptText.addEventListener(ev, (e) => e.preventDefault());
+  });
+  // No pasting into the answer field (typed keystrokes only).
+  typeInput.addEventListener("paste", (e) => e.preventDefault());
+  typeInput.addEventListener("drop", (e) => e.preventDefault());
+  typeInput.addEventListener("contextmenu", (e) => e.preventDefault());
+
   // ---------- Local state ----------
   let myNickname = "";
   let myCoins = 0;

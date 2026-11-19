@@ -132,6 +132,7 @@ html,body{
   font-size:1.5rem;font-weight:700;letter-spacing:.5px;margin-bottom:14px;min-height:40px;
   padding:10px 14px;background:#0e1024;border-radius:12px;border:1px solid var(--border-glow);
   direction:rtl;
+  user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;
 }
 .prompt-text .ok{color:#39d98a;}
 .prompt-text .bad{color:var(--accent-red);text-decoration:underline;}
