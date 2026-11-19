@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Typing Duel | نبرد تایپ</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="bg-fx"></div>
+
+<!-- ===================== LOGIN SCREEN ===================== -->
+<section id="screen-login" class="screen active">
+  <div class="panel glass">
+    <h1 class="logo">⚔️ TYPING <span>DUEL</span></h1>
+    <p class="subtitle">مبارزه آنلاین با سرعت تایپ</p>
+    <input id="nickname-input" type="text" maxlength="20" placeholder="نام کاربری خود را وارد کنید" />
+    <button id="btn-login" class="btn btn-primary">ورود به آرنا</button>
+    <p id="login-error" class="error-text"></p>
+  </div>
+</section>
+
+<!-- ===================== LOBBY SCREEN ===================== -->
+<section id="screen-lobby" class="screen">
+  <div class="panel glass lobby-panel">
+    <div class="lobby-header">
+      <div class="player-tag">
+        <span id="lobby-nickname" class="nick"></span>
+        <span class="coins">🪙 <span id="lobby-coins">0</span></span>
+      </div>
+    </div>
+
+    <h2 class="section-title">انتخاب تنظیمات نبرد</h2>
+
+    <div class="option-group">
+      <label>زبان کلمات</label>
+      <div class="chip-row" id="lang-row">
+        <button class="chip active" data-value="fa">فارسی</button>
+        <button class="chip" data-value="en">English</button>
+      </div>
+    </div>
+
+    <div class="option-group">
+      <label>سطح سختی</label>
+      <div class="chip-row" id="difficulty-row">
+        <button class="chip active" data-value="easy">آسان</button>
+        <button class="chip" data-value="medium">متوسط</button>
+        <button class="chip" data-value="hard">سخت</button>
+      </div>
+    </div>
+
+    <div class="option-group">
+      <label>میزان شرط (سکه)</label>
+      <div class="chip-row" id="bet-row">
+        <button class="chip active" data-value="0">بدون شرط</button>
+        <button class="chip" data-value="50">۵۰</button>
+        <button class="chip" data-value="100">۱۰۰</button>
+        <button class="chip" data-value="250">۲۵۰</button>
+      </div>
+      <p class="hint">برنده‌ی نبرد، کل مجموع شرط هر دو طرف را می‌برد.</p>
+    </div>
+
+    <button id="btn-find-match" class="btn btn-primary btn-big">🔍 یافتن حریف</button>
+
+    <div id="waiting-box" class="waiting-box hidden">
+      <div class="spinner"></div>
+      <p>در انتظار حریف آنلاین...</p>
+      <button id="btn-cancel-find" class="btn btn-ghost">انصراف</button>
+    </div>
+
+    <p id="lobby-error" class="error-text"></p>
+  </div>
+</section>
+
+<!-- ===================== VS / INTRO SCREEN ===================== -->
+<section id="screen-vs" class="screen">
+  <div class="vs-wrap">
+    <div class="vs-side vs-left">
+      <div id="vs-char-left" class="char-portrait"></div>
+      <div class="vs-name" id="vs-name-left"></div>
+    </div>
+    <div class="vs-mid">VS</div>
+    <div class="vs-side vs-right">
+      <div id="vs-char-right" class="char-portrait"></div>
+      <div class="vs-name" id="vs-name-right"></div>
+    </div>
+  </div>
+  <div class="vs-pot">💰 جایزه نبرد: <span id="vs-pot">0</span> سکه</div>
+</section>
+
+<!-- ===================== BATTLE SCREEN ===================== -->
+<section id="screen-battle" class="screen">
+  <div class="arena">
+
+    <div class="hud">
+      <div class="hp-block hp-left">
+        <div class="hp-name" id="hp-name-left"></div>
+        <div class="hp-bar-outer"><div class="hp-bar-inner" id="hp-bar-left"></div></div>
+      </div>
+      <div class="round-indicator">دور <span id="round-num">1</span></div>
+      <div class="hp-block hp-right">
+        <div class="hp-name" id="hp-name-right"></div>
+        <div class="hp-bar-outer"><div class="hp-bar-inner" id="hp-bar-right"></div></div>
+      </div>
+    </div>
+
+    <div class="fighters-stage">
+      <div id="fighter-left" class="fighter-wrap fighter-left-wrap"></div>
+      <div id="vfx-layer" class="vfx-layer"></div>
+      <div id="fighter-right" class="fighter-wrap fighter-right-wrap"></div>
+    </div>
+
+    <div class="prompt-zone">
+      <div class="timer-outer"><div class="timer-inner" id="timer-bar"></div></div>
+      <div id="prompt-text" class="prompt-text">—</div>
+      <input id="type-input" class="type-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="همین متن را تایپ کن..." />
+      <div id="round-msg" class="round-msg"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== GAME OVER SCREEN ===================== -->
+<section id="screen-gameover" class="screen">
+  <div class="panel glass gameover-panel">
+    <h2 id="gameover-title" class="gameover-title"></h2>
+    <p id="gameover-sub" class="gameover-sub"></p>
+    <p class="coins-final">🪙 سکه فعلی: <span id="gameover-coins">0</span></p>
+    <button id="btn-rematch" class="btn btn-primary">بازگشت به لابی</button>
+  </div>
+</section>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="characters.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

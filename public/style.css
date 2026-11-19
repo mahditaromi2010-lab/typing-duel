@@ -1,0 +1,235 @@
+/* ===================== Base ===================== */
+:root{
+  --bg-deep:#0b0c16;
+  --bg-mid:#141529;
+  --accent-red:#ff4757;
+  --accent-blue:#3da9ff;
+  --accent-gold:#ffd166;
+  --text-light:#eef0ff;
+  --text-dim:#8c90b8;
+  --glass:rgba(22,24,46,.72);
+  --border-glow:rgba(255,255,255,.08);
+}
+*{box-sizing:border-box;}
+html,body{
+  margin:0;height:100%;
+  background:radial-gradient(circle at 50% 20%, #1b1e3b 0%, var(--bg-deep) 60%);
+  color:var(--text-light);
+  font-family:"Vazirmatn","Segoe UI",Tahoma,sans-serif;
+  overflow:hidden;
+}
+#bg-fx{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 85%, rgba(255,71,87,.12), transparent 40%),
+    radial-gradient(circle at 85% 15%, rgba(61,169,255,.12), transparent 40%);
+}
+
+/* ===================== Screens ===================== */
+.screen{
+  position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+  z-index:1; flex-direction:column; padding:20px;
+}
+.screen.active{display:flex;}
+
+.glass{
+  background:var(--glass);
+  border:1px solid var(--border-glow);
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+  backdrop-filter: blur(10px);
+}
+.panel{padding:32px 36px;max-width:420px;width:100%;}
+
+/* ===================== Login ===================== */
+.logo{font-size:2.2rem;text-align:center;margin:0 0 4px;letter-spacing:1px;}
+.logo span{color:var(--accent-red);text-shadow:0 0 18px rgba(255,71,87,.6);}
+.subtitle{text-align:center;color:var(--text-dim);margin-bottom:24px;}
+#nickname-input{
+  width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--border-glow);
+  background:#0e1024;color:var(--text-light);font-size:1rem;margin-bottom:16px;text-align:center;
+}
+.btn{
+  width:100%;padding:14px 18px;border:none;border-radius:12px;cursor:pointer;
+  font-size:1rem;font-weight:700;transition:transform .12s, box-shadow .12s;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{
+  background:linear-gradient(135deg, var(--accent-red), #ff6b81);
+  color:#fff; box-shadow:0 8px 24px rgba(255,71,87,.35);
+}
+.btn-primary:hover{box-shadow:0 10px 30px rgba(255,71,87,.5);}
+.btn-big{font-size:1.1rem;padding:16px;}
+.btn-ghost{
+  background:transparent;border:1px solid var(--border-glow);color:var(--text-dim);margin-top:10px;
+}
+.error-text{color:var(--accent-red);text-align:center;min-height:20px;margin-top:10px;font-size:.9rem;}
+
+/* ===================== Lobby ===================== */
+.lobby-panel{max-width:460px;}
+.lobby-header{display:flex;justify-content:center;margin-bottom:18px;}
+.player-tag{display:flex;gap:14px;align-items:center;background:#0e1024;padding:8px 16px;border-radius:30px;border:1px solid var(--border-glow);}
+.player-tag .nick{font-weight:700;color:var(--accent-gold);}
+.coins{color:var(--text-dim);}
+.section-title{text-align:center;font-size:1.1rem;margin:0 0 18px;color:var(--text-dim);font-weight:600;}
+.option-group{margin-bottom:18px;}
+.option-group label{display:block;margin-bottom:8px;color:var(--text-dim);font-size:.9rem;}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{
+  flex:1;padding:10px 8px;border-radius:10px;border:1px solid var(--border-glow);
+  background:#0e1024;color:var(--text-light);cursor:pointer;font-size:.9rem;transition:.15s;
+}
+.chip.active{background:linear-gradient(135deg,var(--accent-blue),#6fc3ff);color:#06101c;border-color:transparent;font-weight:700;}
+.hint{color:var(--text-dim);font-size:.78rem;margin:6px 0 0;}
+.waiting-box{text-align:center;margin-top:18px;}
+.hidden{display:none !important;}
+.spinner{
+  width:40px;height:40px;border-radius:50%;margin:0 auto 10px;
+  border:4px solid var(--border-glow);border-top-color:var(--accent-blue);
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ===================== VS screen ===================== */
+.vs-wrap{display:flex;align-items:center;gap:40px;}
+.vs-side{text-align:center;}
+.char-portrait{width:150px;height:200px;}
+.vs-name{margin-top:10px;font-weight:700;font-size:1.1rem;}
+.vs-mid{font-size:2.6rem;font-weight:900;color:var(--accent-gold);text-shadow:0 0 20px rgba(255,209,102,.6);
+  animation:pulseVs 1s ease-in-out infinite;}
+@keyframes pulseVs{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.vs-pot{margin-top:26px;font-size:1.1rem;color:var(--accent-gold);}
+
+/* ===================== Battle ===================== */
+.arena{width:100%;max-width:900px;height:100%;max-height:640px;display:flex;flex-direction:column;}
+.hud{display:flex;align-items:center;gap:16px;padding:10px 6px;}
+.hp-block{flex:1;}
+.hp-name{font-size:.85rem;margin-bottom:4px;color:var(--text-dim);}
+.hp-right .hp-name{text-align:left;}
+.hp-bar-outer{height:16px;border-radius:8px;background:#1a1c36;border:1px solid var(--border-glow);overflow:hidden;}
+.hp-bar-inner{height:100%;background:linear-gradient(90deg,#39d98a,#1fae6b);transition:width .4s ease;}
+.hp-right .hp-bar-inner{margin-right:0;margin-left:auto;}
+.round-indicator{font-size:.9rem;color:var(--text-dim);white-space:nowrap;}
+
+.fighters-stage{
+  position:relative;flex:1;border-radius:18px;margin:6px 0;
+  background:
+    linear-gradient(180deg, rgba(20,22,45,.4), rgba(10,11,25,.8)),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.015) 0 2px, transparent 2px 40px);
+  border:1px solid var(--border-glow);
+  overflow:hidden;
+  display:flex;align-items:flex-end;justify-content:space-between;padding:0 6%;
+}
+.fighter-wrap{width:180px;height:260px;position:relative;}
+.vfx-layer{position:absolute;inset:0;pointer-events:none;z-index:5;}
+
+.prompt-zone{padding:14px 6px 4px;text-align:center;}
+.timer-outer{height:8px;border-radius:5px;background:#1a1c36;overflow:hidden;margin-bottom:12px;}
+.timer-inner{height:100%;background:linear-gradient(90deg,var(--accent-gold),var(--accent-red));width:100%;transition:width .1s linear;}
+.prompt-text{
+  font-size:1.5rem;font-weight:700;letter-spacing:.5px;margin-bottom:14px;min-height:40px;
+  padding:10px 14px;background:#0e1024;border-radius:12px;border:1px solid var(--border-glow);
+  direction:rtl;
+}
+.prompt-text .ok{color:#39d98a;}
+.prompt-text .bad{color:var(--accent-red);text-decoration:underline;}
+.type-input{
+  width:100%;max-width:560px;padding:14px 16px;border-radius:12px;border:2px solid var(--border-glow);
+  background:#07081a;color:var(--text-light);font-size:1.1rem;text-align:center;
+}
+.type-input.correct-flash{border-color:#39d98a;box-shadow:0 0 20px rgba(57,217,138,.5);}
+.round-msg{min-height:22px;margin-top:8px;font-weight:700;color:var(--accent-gold);}
+
+/* ===================== Game over ===================== */
+.gameover-panel{text-align:center;}
+.gameover-title{font-size:1.8rem;margin-bottom:6px;}
+.gameover-title.win{color:#39d98a;text-shadow:0 0 18px rgba(57,217,138,.5);}
+.gameover-title.lose{color:var(--accent-red);text-shadow:0 0 18px rgba(255,71,87,.5);}
+.gameover-sub{color:var(--text-dim);margin-bottom:14px;}
+.coins-final{color:var(--accent-gold);font-size:1.1rem;margin-bottom:22px;}
+
+/* ===================== Fighter SVG base states ===================== */
+.fighter-svg{width:100%;height:100%;overflow:visible;transition:filter .15s;}
+.fighter-right-wrap .fighter-svg{transform:scaleX(-1);}
+
+.fighter-wrap.hit .fighter-svg{animation:hitShake .35s;}
+@keyframes hitShake{
+  0%{transform:translateX(0) scaleX(var(--flip,1));}
+  25%{transform:translateX(-10px) scaleX(var(--flip,1));}
+  50%{transform:translateX(8px) scaleX(var(--flip,1));}
+  75%{transform:translateX(-4px) scaleX(var(--flip,1));}
+  100%{transform:translateX(0) scaleX(var(--flip,1));}
+}
+.fighter-right-wrap.hit .fighter-svg{--flip:-1;}
+
+.fighter-wrap.attack-jab .fighter-svg{animation:atkJab .4s ease-out;}
+@keyframes atkJab{
+  0%{transform:translateX(0);}
+  40%{transform:translateX(18px) scale(1.03);}
+  100%{transform:translateX(0);}
+}
+.fighter-right-wrap.attack-jab .fighter-svg{animation:atkJabR .4s ease-out;}
+@keyframes atkJabR{
+  0%{transform:scaleX(-1) translateX(0);}
+  40%{transform:scaleX(-1) translateX(18px) scale(1.03);}
+  100%{transform:scaleX(-1) translateX(0);}
+}
+
+.fighter-wrap.attack-roundhouse .fighter-svg,
+.fighter-right-wrap.attack-roundhouse .fighter-svg{animation:atkSpin .55s ease-in-out;}
+@keyframes atkSpin{
+  0%{transform:rotate(0deg);}
+  50%{transform:rotate(25deg) translateX(14px);}
+  100%{transform:rotate(0deg);}
+}
+
+.fighter-wrap.attack-slash .fighter-svg,
+.fighter-right-wrap.attack-slash .fighter-svg{animation:atkSlash .45s ease-out;}
+@keyframes atkSlash{
+  0%{transform:translateY(0) rotate(0deg);}
+  50%{transform:translateY(-10px) rotate(-10deg);}
+  100%{transform:translateY(0) rotate(0deg);}
+}
+
+.fighter-wrap.attack-flamepunch .fighter-svg,
+.fighter-right-wrap.attack-flamepunch .fighter-svg{animation:atkFlame .5s ease-out;}
+@keyframes atkFlame{
+  0%{transform:translateX(0) scale(1);filter:drop-shadow(0 0 0 transparent);}
+  45%{transform:translateX(22px) scale(1.08);filter:drop-shadow(0 0 16px rgba(255,120,40,.9));}
+  100%{transform:translateX(0) scale(1);filter:drop-shadow(0 0 0 transparent);}
+}
+
+.fighter-wrap.ko .fighter-svg{animation:koFall .8s forwards ease-in;}
+@keyframes koFall{
+  to{transform:rotate(80deg) translateY(40px);opacity:.4;}
+}
+
+/* VFX particles */
+.vfx-hit{
+  position:absolute;width:70px;height:70px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,255,255,.9), rgba(255,209,102,.6) 40%, transparent 70%);
+  transform:translate(-50%,-50%) scale(.2);
+  animation:vfxPop .5s ease-out forwards;
+}
+@keyframes vfxPop{
+  0%{transform:translate(-50%,-50%) scale(.2);opacity:1;}
+  60%{transform:translate(-50%,-50%) scale(1.3);opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(1.6);opacity:0;}
+}
+
+.dmg-float{
+  position:absolute;font-weight:900;font-size:1.6rem;color:var(--accent-red);
+  text-shadow:0 2px 6px rgba(0,0,0,.6);
+  animation:dmgFloat 1s ease-out forwards;
+}
+@keyframes dmgFloat{
+  0%{transform:translate(-50%,0);opacity:1;}
+  100%{transform:translate(-50%,-60px);opacity:0;}
+}
+
+@media (max-width:640px){
+  .vs-wrap{gap:16px;}
+  .char-portrait{width:100px;height:140px;}
+  .fighter-wrap{width:120px;height:180px;}
+  .prompt-text{font-size:1.15rem;}
+}
