@@ -201,7 +201,31 @@ html,body{
 
 .fighter-wrap.ko .fighter-svg{animation:koFall .8s forwards ease-in;}
 @keyframes koFall{
+  0%{transform:rotate(0deg) translateY(0);}
+  30%{transform:rotate(20deg) translateY(-6px);}
   to{transform:rotate(80deg) translateY(40px);opacity:.4;}
+}
+.fighter-right-wrap.ko .fighter-svg{animation:koFallR .8s forwards ease-in;}
+@keyframes koFallR{
+  0%{transform:scaleX(-1) rotate(0deg) translateY(0);}
+  30%{transform:scaleX(-1) rotate(-20deg) translateY(-6px);}
+  to{transform:scaleX(-1) rotate(-80deg) translateY(40px);opacity:.4;}
+}
+
+/* KO variant 2: knocked backward off their feet */
+.fighter-wrap.ko2 .fighter-svg{animation:koBack .85s forwards cubic-bezier(.3,.8,.4,1);}
+@keyframes koBack{
+  0%{transform:translateX(0) translateY(0) rotate(0deg);}
+  35%{transform:translateX(-26px) translateY(-18px) rotate(-18deg);}
+  70%{transform:translateX(-40px) translateY(10px) rotate(-55deg);}
+  100%{transform:translateX(-46px) translateY(34px) rotate(-92deg);opacity:.35;}
+}
+.fighter-right-wrap.ko2 .fighter-svg{animation:koBackR .85s forwards cubic-bezier(.3,.8,.4,1);}
+@keyframes koBackR{
+  0%{transform:scaleX(-1) translateX(0) translateY(0) rotate(0deg);}
+  35%{transform:scaleX(-1) translateX(-26px) translateY(-18px) rotate(-18deg);}
+  70%{transform:scaleX(-1) translateX(-40px) translateY(10px) rotate(-55deg);}
+  100%{transform:scaleX(-1) translateX(-46px) translateY(34px) rotate(-92deg);opacity:.35;}
 }
 
 /* VFX particles */
@@ -225,6 +249,35 @@ html,body{
 @keyframes dmgFloat{
   0%{transform:translate(-50%,0);opacity:1;}
   100%{transform:translate(-50%,-60px);opacity:0;}
+}
+
+.vfx-ring{
+  position:absolute;width:20px;height:20px;border-radius:50%;
+  border:3px solid #fff;transform:translate(-50%,-50%) scale(.3);
+  animation:vfxRing .45s ease-out forwards;
+}
+@keyframes vfxRing{
+  0%{transform:translate(-50%,-50%) scale(.3);opacity:1;}
+  100%{transform:translate(-50%,-50%) scale(2.6);opacity:0;}
+}
+
+.vfx-shard{
+  position:absolute;width:6px;height:6px;border-radius:1px;
+  background:#fff;transform:translate(-50%,-50%);
+  animation:vfxShard .5s ease-out forwards;
+}
+@keyframes vfxShard{
+  0%{transform:translate(-50%,-50%) rotate(var(--ang)) translateX(0) scale(1);opacity:1;}
+  100%{transform:translate(-50%,-50%) rotate(var(--ang)) translateX(var(--dist)) scale(.2);opacity:0;}
+}
+
+.stage-shake{animation:stageShake .35s ease-in-out;}
+@keyframes stageShake{
+  0%,100%{transform:translate(0,0);}
+  20%{transform:translate(-6px,2px);}
+  40%{transform:translate(5px,-3px);}
+  60%{transform:translate(-4px,-2px);}
+  80%{transform:translate(3px,3px);}
 }
 
 @media (max-width:640px){

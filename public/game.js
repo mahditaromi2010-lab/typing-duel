@@ -67,6 +67,7 @@
   function wireChipRow(rowEl, key) {
     rowEl.querySelectorAll(".chip").forEach((chip) => {
       chip.addEventListener("click", () => {
+        SFX.click();
         rowEl.querySelectorAll(".chip").forEach((c) => c.classList.remove("active"));
         chip.classList.add("active");
         selected[key] = isNaN(Number(chip.dataset.value)) || key === "lang" || key === "difficulty"
@@ -80,8 +81,8 @@
   wireChipRow(betRow, "bet");
 
   // ---------- Login ----------
-  btnLogin.addEventListener("click", doLogin);
-  nicknameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+  btnLogin.addEventListener("click", () => { SFX.unlock(); SFX.click(); doLogin(); });
+  nicknameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { SFX.unlock(); doLogin(); } });
 
   function doLogin() {
     const nickname = nicknameInput.value.trim();
@@ -104,6 +105,7 @@
 
   // ---------- Matchmaking ----------
   btnFindMatch.addEventListener("click", () => {
+    SFX.click();
     lobbyError.textContent = "";
     if (selected.bet > myCoins) {
       lobbyError.textContent = "سکه کافی برای این شرط نداری.";
@@ -115,6 +117,7 @@
   });
 
   btnCancelFind.addEventListener("click", () => {
+    SFX.click();
     socket.emit("cancel_find");
     waitingBox.classList.add("hidden");
     btnFindMatch.classList.remove("hidden");
@@ -133,6 +136,7 @@
 
   // ---------- Match found ----------
   socket.on("match_found", (data) => {
+    SFX.matchFound();
     waitingBox.classList.add("hidden");
     btnFindMatch.classList.remove("hidden");
 
@@ -157,11 +161,12 @@
       hpNameRight.textContent = `${match.opp.nickname} (${match.opp.character.name})`;
       mountFighter(fighterLeft, match.me.character.id);
       mountFighter(fighterRight, match.opp.character.id);
-      fighterLeft.classList.remove("hit", "ko");
-      fighterRight.classList.remove("hit", "ko");
+      fighterLeft.classList.remove("hit", "ko", "ko2");
+      fighterRight.classList.remove("hit", "ko", "ko2");
       setHpBar(hpBarLeft, 100);
       setHpBar(hpBarRight, 100);
       roundMsg.textContent = "";
+      SFX.countdownBeep(true);
       showScreen("battle");
     }, 2300);
   });
@@ -236,12 +241,15 @@
     attackerWrap.classList.remove("attack-jab", "attack-roundhouse", "attack-slash", "attack-flamepunch");
     void attackerWrap.offsetWidth;
     attackerWrap.classList.add("attack-" + attackType);
+    SFX.attack(attackType);
 
     setTimeout(() => {
       defenderWrap.classList.remove("hit");
       void defenderWrap.offsetWidth;
       defenderWrap.classList.add("hit");
       setHpBar(defenderHpBar, (defenderHp / defenderMaxHp) * 100);
+      SFX.hitImpact(damage);
+      shakeStage(fightersStage);
 
       const rect = fightersStage.getBoundingClientRect();
       const tRect = defenderWrap.getBoundingClientRect();
@@ -257,7 +265,11 @@
     }, 650);
 
     if (defenderHp <= 0) {
-      setTimeout(() => defenderWrap.classList.add("ko"), 300);
+      setTimeout(() => {
+        const koVariant = Math.random() < 0.5 ? "ko" : "ko2";
+        defenderWrap.classList.add(koVariant);
+        SFX.ko();
+      }, 300);
     }
   });
 
@@ -266,6 +278,7 @@
     const iWon = winnerNickname === myNickname;
     gameoverTitle.textContent = iWon ? "🏆 تو برنده شدی!" : "💀 شکست خوردی";
     gameoverTitle.className = "gameover-title " + (iWon ? "win" : "lose");
+    if (iWon) SFX.victory(); else SFX.defeat();
 
     if (reason === "opponent_disconnected" && iWon) {
       gameoverSub.textContent = "حریف از بازی خارج شد.";
@@ -285,6 +298,7 @@
   });
 
   btnRematch.addEventListener("click", () => {
+    SFX.click();
     match = null;
     roundMsg.textContent = "";
     showScreen("lobby");
