@@ -114,8 +114,10 @@ html,body{
 .fighters-stage{
   position:relative;flex:1;border-radius:18px;margin:6px 0;
   background:
-    linear-gradient(180deg, rgba(20,22,45,.4), rgba(10,11,25,.8)),
-    repeating-linear-gradient(90deg, rgba(255,255,255,.015) 0 2px, transparent 2px 40px);
+    linear-gradient(180deg, rgba(10,8,16,0) 40%, rgba(8,6,12,.55) 100%),
+    url("bg-arena.svg");
+  background-size:cover;
+  background-position:center bottom;
   border:1px solid var(--border-glow);
   overflow:hidden;
   display:flex;align-items:flex-end;justify-content:space-between;padding:0 6%;
