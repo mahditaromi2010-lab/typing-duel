@@ -29,6 +29,12 @@ const PORT = process.env.PORT || 3000;
 const DB_PATH = path.join(__dirname, "data", "users.json");
 const STARTING_COINS = 500;
 
+function ensureDataDir() {
+  const dir = path.dirname(DB_PATH);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
 function loadUsers() {
   try {
     return JSON.parse(fs.readFileSync(DB_PATH, "utf8"));
@@ -37,8 +43,14 @@ function loadUsers() {
   }
 }
 function saveUsers(users) {
-  fs.writeFileSync(DB_PATH, JSON.stringify(users, null, 2));
+  try {
+    ensureDataDir();
+    fs.writeFileSync(DB_PATH, JSON.stringify(users, null, 2));
+  } catch (err) {
+    console.error("Failed to persist users.json:", err.message);
+  }
 }
+ensureDataDir();
 let users = loadUsers();
 
 function getOrCreateUser(nickname) {
